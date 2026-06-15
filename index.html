@@ -333,8 +333,6 @@ document.getElementById("formulario").addEventListener("submit", async function(
     const longitude = pos.coords.longitude;
     const precisao = Math.round(pos.coords.accuracy) + "m";
 
-    status.innerHTML = "Buscando endereço...";
-
     const endereco = await obterEndereco(latitude, longitude);
 
     status.innerHTML = "Enviando registro...";
@@ -344,13 +342,13 @@ document.getElementById("formulario").addEventListener("submit", async function(
     const dados = {
       nome,
       pontos,
+      latitude,
+      longitude,
+      precisao,
       bairro: endereco.bairro,
       rua: endereco.rua,
       numero: endereco.numero,
       cidadeEstado: endereco.cidadeEstado,
-      latitude,
-      longitude,
-      precisao,
       foto
     };
 
