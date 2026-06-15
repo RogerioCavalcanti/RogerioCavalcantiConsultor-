@@ -11,103 +11,135 @@
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#050505;
+  background:#000;
   color:#fff;
   min-height:100vh;
   padding:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
 }
 
 .container{
   width:100%;
-  max-width:430px;
+  max-width:520px;
+  margin:auto;
 }
 
 .logo{
-  width:180px;
-  height:180px;
+  width:260px;
+  height:260px;
   object-fit:cover;
   display:block;
-  margin:0 auto 10px;
-  border-radius:50%;
+  margin:0 auto -20px;
+}
+
+.consultor{
+  text-align:center;
+  color:#d4af37;
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:2px;
+  margin-top:-10px;
+}
+
+.nome-marca{
+  text-align:center;
+  color:#d4af37;
+  font-size:36px;
+  font-weight:bold;
+  margin:4px 0;
+  text-shadow:0 0 12px rgba(212,175,55,.35);
 }
 
 .titulo{
   text-align:center;
-  color:#d4af37;
-  font-size:30px;
-  font-weight:bold;
-  margin-bottom:22px;
+  color:#fff;
+  font-size:26px;
+  margin:8px 0 18px;
   letter-spacing:2px;
 }
 
 .card{
   border:1px solid #d4af37;
-  border-radius:20px;
-  padding:22px;
-  background:#090909;
-  box-shadow:0 0 25px rgba(212,175,55,.20);
+  border-radius:22px;
+  padding:24px;
+  background:#050505;
+  box-shadow:0 0 25px rgba(212,175,55,.18);
 }
 
 label{
   display:block;
   color:#d4af37;
   font-weight:bold;
-  margin-top:18px;
+  margin-top:22px;
   font-size:18px;
 }
 
 input{
   width:100%;
-  padding:16px;
+  padding:17px;
   border-radius:10px;
   border:1px solid #555;
-  background:#080808;
+  background:#050505;
   color:#fff;
   font-size:17px;
   margin-top:8px;
 }
 
-input::placeholder{
-  color:#aaa;
+input::placeholder{color:#aaa}
+
+#contador{
+  float:right;
+  color:#ddd;
+  font-size:15px;
 }
 
-.file-area{
+.file-label{
+  display:flex;
+  align-items:center;
+  gap:14px;
   border:1px solid #d4af37;
   border-radius:10px;
-  padding:14px;
-  margin-top:8px;
+  padding:18px;
+  margin-top:10px;
+  cursor:pointer;
+  color:#fff;
+}
+
+.file-label span{
+  display:block;
+  font-size:18px;
+}
+
+.file-label small{
+  color:#bbb;
+}
+
+input[type=file]{
+  display:none;
 }
 
 #preview{
   width:100%;
   margin-top:14px;
-  border-radius:10px;
+  border-radius:12px;
   display:none;
+  border:1px solid #d4af37;
 }
 
 button.enviar{
   width:100%;
-  padding:17px;
-  margin-top:24px;
+  padding:18px;
+  margin-top:26px;
   background:#d4af37;
   color:#000;
   border:none;
   border-radius:10px;
-  font-size:20px;
-  font-weight:bold;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:1px;
 }
 
 button:disabled{
   opacity:.6;
-}
-
-#contador{
-  float:right;
-  color:#aaa;
-  font-size:15px;
 }
 
 #status{
@@ -124,10 +156,31 @@ button:disabled{
   border-radius:18px;
   padding:28px;
   background:#090909;
+  margin-top:60px;
 }
 
-.sucesso h2{
-  color:#d4af37;
+.sucesso h2{color:#d4af37}
+
+.aviso{
+  text-align:center;
+  color:#ccc;
+  font-size:14px;
+  margin-top:18px;
+}
+
+@media(max-width:480px){
+  .logo{
+    width:220px;
+    height:220px;
+  }
+
+  .nome-marca{
+    font-size:28px;
+  }
+
+  .card{
+    padding:20px;
+  }
 }
 </style>
 </head>
@@ -138,6 +191,8 @@ button:disabled{
 
   <img src="leao.jpeg" class="logo">
 
+  <div class="consultor">CONSULTOR</div>
+  <div class="nome-marca">ROGÉRIO CAVALCANTI</div>
   <div class="titulo">REGISTRO</div>
 
   <div class="card">
@@ -156,13 +211,24 @@ button:disabled{
         required>
 
       <label>FOTO OBRIGATÓRIA</label>
-      <div class="file-area">
-        <input type="file" id="foto" accept="image/*" capture="environment" required>
-      </div>
+
+      <label class="file-label" for="foto">
+        📷
+        <div>
+          <span>Escolher foto</span>
+          <small>A foto será usada como registro</small>
+        </div>
+      </label>
+
+      <input type="file" id="foto" accept="image/*" capture="environment" required>
 
       <img id="preview">
 
-      <button class="enviar" id="btnEnviar" type="submit">ENVIAR REGISTRO</button>
+      <button class="enviar" id="btnEnviar" type="submit">➤ ENVIAR REGISTRO</button>
+
+      <div class="aviso">
+        Apenas um registro por dispositivo a cada 5 minutos.
+      </div>
 
     </form>
 
@@ -368,13 +434,6 @@ document.getElementById("formulario").addEventListener("submit", async function(
     setTimeout(()=>{
       window.open("", "_self");
       window.close();
-
-      document.body.innerHTML = `
-        <div style="color:white;text-align:center;margin-top:80px;font-family:Arial">
-          <h2>✅ REGISTRO ENVIADO</h2>
-          <p>Você poderá enviar novamente depois de 5 minutos.</p>
-        </div>
-      `;
     },2000);
 
   }catch(err){
