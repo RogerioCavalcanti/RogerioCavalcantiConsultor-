@@ -1,1 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rogério Cavalcanti</title>
 
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#111;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:20px;
+}
+.card{
+  width:100%;
+  max-width:430px;
+  background:#1b1b1b;
+  border:1px solid #d4af37;
+  border-radius:18px;
+  padding:26px;
+  box-shadow:0 0 25px rgba(212,175,55,.25);
+}
+h1{
+  text-align:center;
+  color:#d4af37;
+  margin:0;
+  font-size:26px;
+}
+h2{
+  text-align:center;
+  font-size:17px;
+  margin:8px 0 25px;
+  font-weight:400;
+}
+label{
+  display:block;
+  margin-top:16px;
+  font-weight:bold;
+}
+input{
+  width:100%;
+  padding:15px;
+  border-radius:10px;
+  border:none;
+  margin-top:7px;
+  font-size:16px;
+}
+button{
+  width:100%;
+  padding:16px;
+  margin-top:22px;
+  background:#d4af37;
+  color:#111;
+  border:none;
+  border-radius:10px;
+  font-size:17px;
+  font-weight:bold;
+}
+button:disabled{
+  opacity:.6;
+}
+#preview{
+  width:100%;
+  margin-top:12px;
+  border-radius:10px;
+  display:none;
+}
+#status{
+  text-align:center;
+  margin-top:18px;
+  font-weight:bold;
+}
+.sucesso{
+  text-align:center;
+  display:none;
+}
+.sucesso h3{
+  color:#d4af37;
+  font-size:25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="formCard">
+  <h1>ROGÉRIO CAVALCANTI</h1>
+  <h2>Registro de Produção</h2>
+
+  <form id="formulario">
+    <label>Nome do Funcionário</label>
+    <input type="text" id="nome" required>
+
+    <label>Quantidade de Pontos</label>
+    <input type="number" id="quantidade" required min="0">
+
+    <label>Foto Obrigatória</label>
+    <input type="file" id="foto" accept="image/*" capture="environment" required>
+
+    <img id="preview">
+
+    <button id="btnEnviar" type="submit">ENVIAR REGISTRO</button>
+  </form>
+
+  <div id="status"></div>
+</div>
+
+<div class="card sucesso" id="sucesso">
+  <h3>✅ REGISTRO ENVIADO</h3>
+  <p>Obrigado pela colaboração.</p>
+  <p>Seu registro foi recebido com sucesso.</p>
+  <p>Esta página pode ser fechada.</p>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4vwf05TGLVgQGi3eQIMpUQRcVFpCRZNc9lYcaFKEjpL6pnq7ZSkdajZ38X90r5_z8/exec";
+const PRECISAO_MAXIMA = 20;
+
+let jaEnviado = localStorage.getItem("registroEnviadoRC") === "sim";
+
+if(jaEnviado){
+  document.getElementById("formCard").style.display = "none";
+  document.getElementById("sucesso").style.display = "block";
+}
+
+document.getElementById("foto").addEventListener("change", function(){
+  const file = this.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById("preview");
+    img.src = e.target.result;
+    img.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});
+
+function obterGPS(){
+  return new Promise((resolve,reject)=>{
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve(pos),
+      () => reject("Não foi possível obter a localização. Ative o GPS e permita o acesso."),
+      {
+        enableHighAccuracy:true,
+        timeout:30000,
+        maximumAge:0
+      }
+    );
+  });
+}
+
+async function obterEndereco(lat, lon){
+  try{
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1`;
+    const r = await fetch(url);
+    const j = await r.json();
+    const a = j.address || {};
+
+    return {
+      bairro: a.suburb || a.neighbourhood || a.city_district || "",
+      rua: a.road || a.pedestrian || a.residential || "",
+      numero: a.house_number || "",
+      cidade: a.city || a.town || a.village || a.municipality || "",
+      estado: a.state || "",
+      cep: a.postcode || ""
+    };
+  }catch(e){
+    return {
+      bairro:"",
+      rua:"",
+      numero:"",
+      cidade:"",
+      estado:"",
+      cep:""
+    };
+  }
+}
+
+function fotoBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("formulario").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const btn = document.getElementById("btnEnviar");
+  const status = document.getElementById("status");
+
+  if(localStorage.getItem("registroEnviadoRC") === "sim"){
+    status.innerHTML = "Registro já enviado.";
+    return;
+  }
+
+  btn.disabled = true;
+
+  try{
+    status.innerHTML = "Obtendo localização exata...";
+
+    const pos = await obterGPS();
+
+    const latitude = pos.coords.latitude;
+    const longitude = pos.coords.longitude;
+    const precisao = pos.coords.accuracy;
+
+    if(precisao > PRECISAO_MAXIMA){
+      throw new Error("GPS impreciso. Vá para uma área aberta e tente novamente.");
+    }
+
+    status.innerHTML = "Buscando endereço...";
+
+    const endereco = await obterEndereco(latitude, longitude);
+
+    const nome = document.getElementById("nome").value.trim();
+    const quantidade = document.getElementById("quantidade").value;
+    const fotoFile = document.getElementById("foto").files[0];
+
+    if(!fotoFile){
+      throw new Error("A foto é obrigatória.");
+    }
+
+    status.innerHTML = "Enviando registro...";
+
+    const foto = await fotoBase64(fotoFile);
+
+    const dados = {
+      nome,
+      quantidade,
+      latitude,
+      longitude,
+      precisao: Math.round(precisao) + "m",
+      bairro: endereco.bairro,
+      rua: endereco.rua,
+      numero: endereco.numero,
+      cidade: endereco.cidade,
+      estado: endereco.estado,
+      cep: endereco.cep,
+      foto,
+      dispositivo: navigator.userAgent
+    };
+
+    await fetch(SCRIPT_URL, {
+      method:"POST",
+      headers:{
+        "Content-Type":"text/plain;charset=utf-8"
+      },
+      body:JSON.stringify(dados)
+    });
+
+    localStorage.setItem("registroEnviadoRC","sim");
+
+    document.getElementById("formCard").style.display = "none";
+    document.getElementById("sucesso").style.display = "block";
+
+    setTimeout(()=>{
+      window.open("", "_self");
+      window.close();
+    },2000);
+
+  }catch(err){
+    status.innerHTML = "Erro: " + err.message;
+    btn.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>
