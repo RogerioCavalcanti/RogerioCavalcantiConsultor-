@@ -76,6 +76,7 @@ button:disabled{
   text-align:center;
   margin-top:18px;
   font-weight:bold;
+  line-height:1.4;
 }
 .sucesso{
   text-align:center;
@@ -121,11 +122,12 @@ button:disabled{
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4vwf05TGLVgQGi3eQIMpUQRcVFpCRZNc9lYcaFKEjpL6pnq7ZSkdajZ38X90r5_z8/exec";
-const PRECISAO_MAXIMA = 20;
 
-let jaEnviado = localStorage.getItem("registroEnviadoRC") === "sim";
+const PRECISAO_IDEAL = 10;
+const PRECISAO_ACEITAVEL = 20;
+const TEMPO_MAXIMO_GPS = 30000;
 
-if(jaEnviado){
+if(localStorage.getItem("registroEnviadoRC") === "sim"){
   document.getElementById("formCard").style.display = "none";
   document.getElementById("sucesso").style.display = "block";
 }
@@ -145,15 +147,52 @@ document.getElementById("foto").addEventListener("change", function(){
 
 function obterGPS(){
   return new Promise((resolve,reject)=>{
-    navigator.geolocation.getCurrentPosition(
-      pos => resolve(pos),
-      () => reject("Não foi possível obter a localização. Ative o GPS e permita o acesso."),
+    if(!navigator.geolocation){
+      reject("Este aparelho não suporta localização.");
+      return;
+    }
+
+    let melhorPosicao = null;
+    let finalizado = false;
+
+    const watchId = navigator.geolocation.watchPosition(
+      pos => {
+        if(!melhorPosicao || pos.coords.accuracy < melhorPosicao.coords.accuracy){
+          melhorPosicao = pos;
+        }
+
+        if(pos.coords.accuracy <= PRECISAO_IDEAL && !finalizado){
+          finalizado = true;
+          navigator.geolocation.clearWatch(watchId);
+          resolve(pos);
+        }
+      },
+      () => {
+        if(!finalizado){
+          finalizado = true;
+          navigator.geolocation.clearWatch(watchId);
+          reject("Não foi possível obter a localização. Ative o GPS e permita o acesso.");
+        }
+      },
       {
         enableHighAccuracy:true,
-        timeout:30000,
-        maximumAge:0
+        maximumAge:0,
+        timeout:TEMPO_MAXIMO_GPS
       }
     );
+
+    setTimeout(()=>{
+      if(finalizado) return;
+
+      finalizado = true;
+      navigator.geolocation.clearWatch(watchId);
+
+      if(melhorPosicao && melhorPosicao.coords.accuracy <= PRECISAO_ACEITAVEL){
+        resolve(melhorPosicao);
+      }else{
+        reject("GPS impreciso. Vá para uma área aberta, ative o GPS e tente novamente.");
+      }
+    }, TEMPO_MAXIMO_GPS);
   });
 }
 
@@ -207,7 +246,7 @@ document.getElementById("formulario").addEventListener("submit", async function(
   btn.disabled = true;
 
   try{
-    status.innerHTML = "Obtendo localização exata...";
+    status.innerHTML = "Obtendo localização mais precisa...<br>Aguarde até 30 segundos.";
 
     const pos = await obterGPS();
 
@@ -215,17 +254,21 @@ document.getElementById("formulario").addEventListener("submit", async function(
     const longitude = pos.coords.longitude;
     const precisao = pos.coords.accuracy;
 
-    if(precisao > PRECISAO_MAXIMA){
-      throw new Error("GPS impreciso. Vá para uma área aberta e tente novamente.");
-    }
-
-    status.innerHTML = "Buscando endereço...";
+    status.innerHTML = "Buscando endereço completo...";
 
     const endereco = await obterEndereco(latitude, longitude);
 
     const nome = document.getElementById("nome").value.trim();
     const quantidade = document.getElementById("quantidade").value;
     const fotoFile = document.getElementById("foto").files[0];
+
+    if(!nome){
+      throw new Error("Informe o nome do funcionário.");
+    }
+
+    if(!quantidade){
+      throw new Error("Informe a quantidade de pontos.");
+    }
 
     if(!fotoFile){
       throw new Error("A foto é obrigatória.");
