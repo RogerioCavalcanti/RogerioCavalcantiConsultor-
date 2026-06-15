@@ -3,118 +3,226 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rogério Cavalcanti</title>
+<title>Registro</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#111;
+  background:#050505;
   color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   min-height:100vh;
-  padding:20px;
+  padding:14px;
 }
-.card{
-  width:100%;
-  max-width:430px;
-  background:#1b1b1b;
-  border:1px solid #d4af37;
-  border-radius:18px;
-  padding:26px;
-  box-shadow:0 0 25px rgba(212,175,55,.25);
+
+.container{
+  max-width:520px;
+  margin:auto;
 }
-h1{
+
+.logo{
+  width:180px;
+  height:180px;
+  object-fit:cover;
+  display:block;
+  margin:0 auto 8px;
+  border-radius:50%;
+}
+
+.consultor{
   text-align:center;
   color:#d4af37;
-  margin:0;
-  font-size:26px;
+  font-size:20px;
+  font-weight:bold;
+  letter-spacing:2px;
 }
-h2{
+
+.nome-marca{
   text-align:center;
-  font-size:17px;
-  margin:8px 0 25px;
-  font-weight:400;
+  color:#d4af37;
+  font-size:30px;
+  font-weight:bold;
+  margin:4px 0;
 }
+
+.registro{
+  text-align:center;
+  font-size:24px;
+  margin:8px 0 18px;
+}
+
+.card{
+  border:1px solid #d4af37;
+  border-radius:20px;
+  padding:18px;
+  background:#090909;
+}
+
 label{
   display:block;
-  margin-top:16px;
+  color:#d4af37;
   font-weight:bold;
+  margin-top:18px;
+  font-size:18px;
 }
+
 input{
   width:100%;
-  padding:15px;
-  border-radius:10px;
-  border:none;
-  margin-top:7px;
-  font-size:16px;
-}
-button{
-  width:100%;
   padding:16px;
-  margin-top:22px;
+  border-radius:10px;
+  border:1px solid #555;
+  background:#080808;
+  color:#fff;
+  font-size:17px;
+  margin-top:8px;
+}
+
+input::placeholder{
+  color:#aaa;
+}
+
+.file-area{
+  border:1px solid #d4af37;
+  border-radius:10px;
+  padding:16px;
+  margin-top:8px;
+}
+
+#preview{
+  width:100%;
+  margin-top:14px;
+  border-radius:10px;
+  display:none;
+}
+
+.localizacao{
+  border:1px solid #d4af37;
+  border-radius:12px;
+  padding:14px;
+  margin-top:18px;
+  color:#fff;
+}
+
+.localizacao strong{
+  color:#d4af37;
+}
+
+canvas{
+  width:100%;
+  height:150px;
+  background:#fff;
+  border-radius:10px;
+  margin-top:8px;
+  touch-action:none;
+}
+
+.btn-limpar{
+  background:#222;
+  color:#fff;
+  border:1px solid #777;
+  padding:10px;
+  border-radius:8px;
+  margin-top:8px;
+  width:100%;
+}
+
+button.enviar{
+  width:100%;
+  padding:17px;
+  margin-top:20px;
   background:#d4af37;
-  color:#111;
+  color:#000;
   border:none;
   border-radius:10px;
-  font-size:17px;
+  font-size:20px;
   font-weight:bold;
 }
+
 button:disabled{
   opacity:.6;
 }
-#preview{
-  width:100%;
-  margin-top:12px;
-  border-radius:10px;
-  display:none;
+
+#contador{
+  float:right;
+  color:#aaa;
+  font-size:15px;
 }
+
 #status{
   text-align:center;
-  margin-top:18px;
+  margin-top:16px;
   font-weight:bold;
   line-height:1.4;
 }
+
 .sucesso{
-  text-align:center;
   display:none;
+  text-align:center;
+  border:1px solid #d4af37;
+  border-radius:18px;
+  padding:28px;
+  margin-top:40px;
 }
-.sucesso h3{
+
+.sucesso h2{
   color:#d4af37;
-  font-size:25px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card" id="formCard">
-  <h1>ROGÉRIO CAVALCANTI</h1>
-  <h2>Registro de Produção</h2>
+<div class="container" id="formCard">
 
-  <form id="formulario">
-    <label>Nome do Funcionário</label>
-    <input type="text" id="nome" required>
+  <img src="leao.jpeg" class="logo">
 
-    <label>Quantidade de Pontos</label>
-    <input type="number" id="quantidade" required min="0">
+  <div class="consultor">CONSULTOR</div>
+  <div class="nome-marca">ROGÉRIO CAVALCANTI</div>
+  <div class="registro">REGISTRO</div>
 
-    <label>Foto Obrigatória</label>
-    <input type="file" id="foto" accept="image/*" capture="environment" required>
+  <div class="card">
+    <form id="formulario">
 
-    <img id="preview">
+      <label>NOME</label>
+      <input type="text" id="nome" placeholder="Digite seu nome completo" required>
 
-    <button id="btnEnviar" type="submit">ENVIAR REGISTRO</button>
-  </form>
+      <label>PONTOS <span id="contador">0 / 11</span></label>
+      <input
+        type="text"
+        id="pontos"
+        placeholder="Digite 11 dígitos"
+        maxlength="11"
+        inputmode="numeric"
+        required>
 
-  <div id="status"></div>
+      <label>FOTO OBRIGATÓRIA</label>
+      <div class="file-area">
+        <input type="file" id="foto" accept="image/*" capture="environment" required>
+      </div>
+
+      <img id="preview">
+
+      <div class="localizacao">
+        <strong>LOCALIZAÇÃO OBTIDA AUTOMATICAMENTE</strong><br>
+        Bairro, Rua, Número, Cidade e Estado serão registrados junto com o envio.
+      </div>
+
+      <label>ASSINATURA</label>
+      <canvas id="assinatura" width="500" height="180"></canvas>
+      <button type="button" class="btn-limpar" onclick="limparAssinatura()">Limpar assinatura</button>
+
+      <button class="enviar" id="btnEnviar" type="submit">ENVIAR REGISTRO</button>
+
+    </form>
+
+    <div id="status"></div>
+  </div>
 </div>
 
-<div class="card sucesso" id="sucesso">
-  <h3>✅ REGISTRO ENVIADO</h3>
+<div class="container sucesso" id="sucesso">
+  <h2>✅ REGISTRO ENVIADO</h2>
   <p>Obrigado pela colaboração.</p>
   <p>Seu registro foi recebido com sucesso.</p>
   <p>Esta página pode ser fechada.</p>
@@ -132,6 +240,14 @@ if(localStorage.getItem("registroEnviadoRC") === "sim"){
   document.getElementById("sucesso").style.display = "block";
 }
 
+const pontosInput = document.getElementById("pontos");
+const contador = document.getElementById("contador");
+
+pontosInput.addEventListener("input", function(){
+  this.value = this.value.replace(/\D/g,"").slice(0,11);
+  contador.innerText = this.value.length + " / 11";
+});
+
 document.getElementById("foto").addEventListener("change", function(){
   const file = this.files[0];
   if(!file) return;
@@ -144,6 +260,60 @@ document.getElementById("foto").addEventListener("change", function(){
   };
   reader.readAsDataURL(file);
 });
+
+const canvas = document.getElementById("assinatura");
+const ctx = canvas.getContext("2d");
+
+ctx.lineWidth = 3;
+ctx.lineCap = "round";
+ctx.strokeStyle = "#000";
+
+let desenhando = false;
+let assinou = false;
+
+function posicaoCanvas(e){
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  return {
+    x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+    y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+  };
+}
+
+function iniciar(e){
+  e.preventDefault();
+  desenhando = true;
+  assinou = true;
+  const p = posicaoCanvas(e);
+  ctx.beginPath();
+  ctx.moveTo(p.x,p.y);
+}
+
+function mover(e){
+  if(!desenhando) return;
+  e.preventDefault();
+  const p = posicaoCanvas(e);
+  ctx.lineTo(p.x,p.y);
+  ctx.stroke();
+}
+
+function parar(){
+  desenhando = false;
+}
+
+canvas.addEventListener("mousedown", iniciar);
+canvas.addEventListener("mousemove", mover);
+canvas.addEventListener("mouseup", parar);
+canvas.addEventListener("mouseleave", parar);
+
+canvas.addEventListener("touchstart", iniciar);
+canvas.addEventListener("touchmove", mover);
+canvas.addEventListener("touchend", parar);
+
+function limparAssinatura(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  assinou = false;
+}
 
 function obterGPS(){
   return new Promise((resolve,reject)=>{
@@ -203,27 +373,20 @@ async function obterEndereco(lat, lon){
     const j = await r.json();
     const a = j.address || {};
 
-    return {
-      bairro: a.suburb || a.neighbourhood || a.city_district || "",
-      rua: a.road || a.pedestrian || a.residential || "",
-      numero: a.house_number || "",
-      cidade: a.city || a.town || a.village || a.municipality || "",
-      estado: a.state || "",
-      cep: a.postcode || ""
-    };
+    const bairro = a.suburb || a.neighbourhood || a.city_district || "";
+    const rua = a.road || a.pedestrian || a.residential || "";
+    const numero = a.house_number || "";
+    const cidade = a.city || a.town || a.village || a.municipality || "";
+    const estado = a.state || "";
+    const cep = a.postcode || "";
+
+    return `${bairro}, ${rua}, ${numero}, ${cidade} - ${estado}, CEP ${cep}`;
   }catch(e){
-    return {
-      bairro:"",
-      rua:"",
-      numero:"",
-      cidade:"",
-      estado:"",
-      cep:""
-    };
+    return "";
   }
 }
 
-function fotoBase64(file){
+function arquivoBase64(file){
   return new Promise((resolve,reject)=>{
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result.split(",")[1]);
@@ -246,52 +409,41 @@ document.getElementById("formulario").addEventListener("submit", async function(
   btn.disabled = true;
 
   try{
+    const nome = document.getElementById("nome").value.trim();
+    const pontos = document.getElementById("pontos").value.trim();
+    const fotoFile = document.getElementById("foto").files[0];
+
+    if(!nome) throw new Error("Informe o nome.");
+    if(pontos.length !== 11) throw new Error("O campo PONTOS precisa ter exatamente 11 dígitos.");
+    if(!fotoFile) throw new Error("A foto é obrigatória.");
+    if(!assinou) throw new Error("A assinatura é obrigatória.");
+
     status.innerHTML = "Obtendo localização mais precisa...<br>Aguarde até 30 segundos.";
 
     const pos = await obterGPS();
 
     const latitude = pos.coords.latitude;
     const longitude = pos.coords.longitude;
-    const precisao = pos.coords.accuracy;
+    const precisao = Math.round(pos.coords.accuracy) + "m";
 
     status.innerHTML = "Buscando endereço completo...";
 
-    const endereco = await obterEndereco(latitude, longitude);
-
-    const nome = document.getElementById("nome").value.trim();
-    const quantidade = document.getElementById("quantidade").value;
-    const fotoFile = document.getElementById("foto").files[0];
-
-    if(!nome){
-      throw new Error("Informe o nome do funcionário.");
-    }
-
-    if(!quantidade){
-      throw new Error("Informe a quantidade de pontos.");
-    }
-
-    if(!fotoFile){
-      throw new Error("A foto é obrigatória.");
-    }
+    const enderecoCompleto = await obterEndereco(latitude, longitude);
 
     status.innerHTML = "Enviando registro...";
 
-    const foto = await fotoBase64(fotoFile);
+    const foto = await arquivoBase64(fotoFile);
+    const assinatura = canvas.toDataURL("image/png").split(",")[1];
 
     const dados = {
       nome,
-      quantidade,
+      pontos,
+      enderecoCompleto,
       latitude,
       longitude,
-      precisao: Math.round(precisao) + "m",
-      bairro: endereco.bairro,
-      rua: endereco.rua,
-      numero: endereco.numero,
-      cidade: endereco.cidade,
-      estado: endereco.estado,
-      cep: endereco.cep,
+      precisao,
       foto,
-      dispositivo: navigator.userAgent
+      assinatura
     };
 
     await fetch(SCRIPT_URL, {
