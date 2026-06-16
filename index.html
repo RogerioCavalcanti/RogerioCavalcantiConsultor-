@@ -1,460 +1,396 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro</title>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-<meta property="og:title" content="Consultor Rogério Cavalcanti">
-<meta property="og:description" content="Registro de Atendimento">
-<meta property="og:image" content="https://rogeriocavalcanti.github.io/RogerioCavalcantiConsultor-/leao.jpeg">
-<meta property="og:url" content="https://rogeriocavalcanti.github.io/RogerioCavalcantiConsultor-/">
-<meta property="og:type" content="website">
+  <style>
+    * {
+      box-sizing: border-box;
+      max-width: 100%;
+    }
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Consultor Rogério Cavalcanti">
-<meta name="twitter:description" content="Registro de Atendimento">
-<meta name="twitter:image" content="https://rogeriocavalcanti.github.io/RogerioCavalcantiConsultor-/leao.jpeg">
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #1b1608, #050505 65%);
+      color: #fff;
+    }
 
-<link rel="icon" type="image/jpeg" href="leao.jpeg">
+    body {
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
-<style>
-*{box-sizing:border-box}
+    .card {
+      width: calc(100vw - 24px);
+      max-width: 560px;
+      margin: 12px auto;
+      padding: 20px;
+      background: #111;
+      border-radius: 22px;
+      border: 1px solid #333;
+      box-shadow: 0 0 35px rgba(212,175,55,0.35);
+    }
+
+    .logo {
+      width: 115px;
+      height: 115px;
+      object-fit: cover;
+      object-position: center 42%;
+      border-radius: 50%;
+      border: 3px solid #d4af37;
+      display: block;
+      margin: 0 auto 14px;
+      box-shadow: 0 0 28px rgba(212,175,55,0.8);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      line-height: 1.2;
+      margin: 8px 0 6px;
+    }
+
+    .subtitulo {
+      text-align: center;
+      color: #d4af37;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 18px;
+    }
+
+    .aviso {
+      background: rgba(212,175,55,0.18);
+      border-left: 5px solid #d4af37;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    input {
+      width: 100%;
+      height: 56px;
+      padding: 0 16px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      border: 1px solid #444;
+      background: #1e1e1e;
+      color: #fff;
+      font-size: 17px;
+      display: block;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #d4af37;
+      box-shadow: 0 0 8px rgba(212,175,55,0.35);
+    }
+
+    label {
+      display: block;
+      color: #d4af37;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 12px 0 7px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 180px;
+      background: white;
+      border-radius: 14px;
+      border: 2px dashed #d4af37;
+      display: block;
+      touch-action: none;
+    }
+
+    .botoes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    button {
+      width: 100%;
+      height: 56px;
+      border-radius: 14px;
+      border: none;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-limpar {
+      background: #303030;
+      color: white;
+      border: 1px solid #555;
+    }
+
+    .btn-enviar {
+      background: linear-gradient(135deg, #d4af37, #ffe17a);
+      color: #111;
+    }
+
+    #status {
+      text-align: center;
+      color: #d4af37;
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 16px;
+      min-height: 24px;
+    }
+
+    .rodape {
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      margin-top: 16px;
+    }
+/* AJUSTE FINAL */
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#000;
-  color:#fff;
-  min-height:100vh;
-  padding:16px;
-}
-
-.container{
-  width:100%;
-  max-width:520px;
-  margin:auto;
-}
-
-.logo{
-  width:260px;
-  height:260px;
-  object-fit:cover;
-  display:block;
-  margin:0 auto -20px;
-}
-
-.consultor{
-  text-align:center;
-  color:#d4af37;
-  font-size:22px;
-  font-weight:bold;
-  letter-spacing:2px;
-  margin-top:-10px;
-}
-
-.nome-marca{
-  text-align:center;
-  color:#d4af37;
-  font-size:36px;
-  font-weight:bold;
-  margin:4px 0;
-  text-shadow:0 0 12px rgba(212,175,55,.35);
-}
-
-.titulo{
-  text-align:center;
-  color:#fff;
-  font-size:26px;
-  margin:8px 0 18px;
-  letter-spacing:2px;
+  padding:4px !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:flex-start !important;
 }
 
 .card{
-  border:1px solid #d4af37;
-  border-radius:22px;
-  padding:24px;
-  background:#050505;
-  box-shadow:0 0 25px rgba(212,175,55,.18);
+  width:calc(100vw - 12px) !important;
+  max-width:620px !important;
+  min-height:auto !important;
+  margin:4px auto !important;
+  padding:22px !important;
+  border-radius:22px !important;
 }
 
-label{
-  display:block;
-  color:#d4af37;
-  font-weight:bold;
-  margin-top:22px;
-  font-size:18px;
+.logo{
+  width:135px !important;
+  height:135px !important;
+}
+
+h1{
+  font-size:30px !important;
+}
+
+.subtitulo{
+  font-size:16px !important;
+}
+
+.aviso{
+  font-size:17px !important;
+  padding:16px !important;
 }
 
 input{
-  width:100%;
-  padding:17px;
-  border-radius:10px;
-  border:1px solid #555;
-  background:#050505;
-  color:#fff;
-  font-size:17px;
-  margin-top:8px;
+  height:64px !important;
+  font-size:20px !important;
 }
 
-input::placeholder{color:#aaa}
-
-#contador{
-  float:right;
-  color:#ddd;
-  font-size:15px;
+label{
+  font-size:18px !important;
 }
 
-.file-label{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  border:1px solid #d4af37;
-  border-radius:10px;
-  padding:18px;
-  margin-top:10px;
-  cursor:pointer;
-  color:#fff;
+canvas{
+  height:210px !important;
 }
 
-.file-label span{
-  display:block;
-  font-size:18px;
+button{
+  height:64px !important;
+  font-size:19px !important;
 }
 
-.file-label small{
-  color:#bbb;
-}
-
-input[type=file]{
-  display:none;
-}
-
-#preview{
-  width:100%;
-  margin-top:14px;
-  border-radius:12px;
-  display:none;
-  border:1px solid #d4af37;
-}
-
-button.enviar{
-  width:100%;
-  padding:18px;
-  margin-top:26px;
-  background:#d4af37;
-  color:#000;
-  border:none;
-  border-radius:10px;
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-
-button:disabled{
-  opacity:.6;
+.rodape{
+  font-size:14px !important;
+  margin-bottom:0 !important;
 }
 
 #status{
-  text-align:center;
-  margin-top:16px;
-  font-weight:bold;
-  line-height:1.4;
+  margin-bottom:0 !important;
 }
-
-.sucesso{
-  display:none;
-  text-align:center;
-  border:1px solid #d4af37;
-  border-radius:18px;
-  padding:28px;
-  background:#090909;
-  margin-top:60px;
-}
-
-.sucesso h2{color:#d4af37}
-
-.aviso{
-  text-align:center;
-  color:#ccc;
-  font-size:14px;
-  margin-top:18px;
-}
-
-@media(max-width:480px){
-  .logo{
-    width:220px;
-    height:220px;
-  }
-
-  .nome-marca{
-    font-size:28px;
-  }
-
-  .card{
-    padding:20px;
-  }
-}
-</style>
+  </style>
 </head>
 
 <body>
-
-<div class="container" id="formCard">
-
-  <img src="leao.jpeg" class="logo">
-
-  <div class="consultor">CONSULTOR</div>
-  <div class="nome-marca">ROGÉRIO CAVALCANTI</div>
-  <div class="titulo">REGISTRO</div>
-
   <div class="card">
-    <form id="formulario">
 
-      <label>NOME</label>
-      <input type="text" id="nome" placeholder="Digite seu nome completo" required>
+    <img src="https://drive.google.com/thumbnail?id=1Gdx2_FyOc3-JFW_0MsWk7NNZnS0uKWQI&sz=w400" class="logo">
 
-      <label>PONTOS <span id="contador">0 / 11</span></label>
-      <input
-        type="text"
-        id="pontos"
-        placeholder="Digite 11 dígitos"
-        maxlength="11"
-        inputmode="numeric"
-        required>
+    <h1>CONFIRMAÇÃO DE ATENDIMENTO</h1>
 
-      <label>FOTO OBRIGATÓRIA</label>
+    <div class="subtitulo">
+      Segurança • Validação • Localização
+    </div>
 
-      <label class="file-label" for="foto">
-        📷
-        <div>
-          <span>Escolher foto</span>
-          <small>A foto será usada como registro</small>
-        </div>
-      </label>
+    <div class="aviso">
+      Ao continuar, você autoriza o envio do seu CPF, localização atual,
+      foto/selfie e assinatura para confirmação de atendimento ou entrega.
+    </div>
 
-      <input type="file" id="foto" accept="image/*" capture="environment" required>
+    <input id="nome" placeholder="Nome completo">
+    <input id="cpf" placeholder="CPF">
+    <input id="telefone" placeholder="Telefone">
 
-      <img id="preview">
+    <label>Foto / Selfie</label>
+    <input id="foto" type="file" accept="image/*" capture="user">
 
-      <button class="enviar" id="btnEnviar" type="submit">➤ ENVIAR REGISTRO</button>
+    <label>Assinatura</label>
+    <canvas id="assinatura" width="500" height="260"></canvas>
 
-      <div class="aviso">
-        Apenas um registro por dispositivo a cada 5 minutos.
-      </div>
+    <div class="botoes">
+      <button class="btn-limpar" onclick="limparAssinatura()">Limpar assinatura</button>
+      <button class="btn-enviar" onclick="enviar()">Confirmar e enviar</button>
+    </div>
 
-    </form>
+    <p id="status"></p>
 
-    <div id="status"></div>
+    <div class="rodape">
+      Seus dados serão usados apenas para confirmação do atendimento.
+    </div>
+
   </div>
-</div>
 
-<div class="container sucesso" id="sucesso">
-  <h2>✅ REGISTRO ENVIADO</h2>
-  <p>Obrigado pela colaboração.</p>
-  <p>Seu registro foi recebido com sucesso.</p>
-  <p>Você poderá enviar novamente em 5 minutos.</p>
-</div>
+  <script>
+    const canvas = document.getElementById("assinatura");
+    const ctx = canvas.getContext("2d");
+    let desenhando = false;
 
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAh1WBJOWdAOQg6tGuLluVJUhVk4vzoHGt_ReL9ADJFZEGE-EL7ySufOqejqzYeslU/exec";
-
-const PRECISAO_IDEAL = 10;
-const PRECISAO_ACEITAVEL = 20;
-const TEMPO_MAXIMO_GPS = 30000;
-const TEMPO_BLOQUEIO = 5 * 60 * 1000;
-
-function bloqueado(){
-  const ultimoEnvio = localStorage.getItem("ultimoEnvioRC");
-  if(!ultimoEnvio) return false;
-  return (Date.now() - Number(ultimoEnvio)) < TEMPO_BLOQUEIO;
-}
-
-if(bloqueado()){
-  document.getElementById("formCard").style.display = "none";
-  document.getElementById("sucesso").style.display = "block";
-}
-
-const pontosInput = document.getElementById("pontos");
-const contador = document.getElementById("contador");
-
-pontosInput.addEventListener("input", function(){
-  this.value = this.value.replace(/\D/g,"").slice(0,11);
-  contador.innerText = this.value.length + " / 11";
-});
-
-document.getElementById("foto").addEventListener("change", function(){
-  const file = this.files[0];
-  if(!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = e => {
-    const img = document.getElementById("preview");
-    img.src = e.target.result;
-    img.style.display = "block";
-  };
-
-  reader.readAsDataURL(file);
-});
-
-function obterGPS(){
-  return new Promise((resolve,reject)=>{
-    if(!navigator.geolocation){
-      reject("Este aparelho não suporta localização.");
-      return;
+    function posicao(e) {
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches ? e.touches[0] : e;
+      return {
+        x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+        y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+      };
     }
 
-    let melhorPosicao = null;
-    let finalizado = false;
+    function iniciar(e) {
+      e.preventDefault();
+      desenhando = true;
+      const p = posicao(e);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+    }
 
-    const watchId = navigator.geolocation.watchPosition(
-      pos => {
-        if(!melhorPosicao || pos.coords.accuracy < melhorPosicao.coords.accuracy){
-          melhorPosicao = pos;
-        }
+    function parar(e) {
+      e.preventDefault();
+      desenhando = false;
+    }
 
-        if(pos.coords.accuracy <= PRECISAO_IDEAL && !finalizado){
-          finalizado = true;
-          navigator.geolocation.clearWatch(watchId);
-          resolve(pos);
-        }
-      },
-      () => {
-        if(!finalizado){
-          finalizado = true;
-          navigator.geolocation.clearWatch(watchId);
-          reject("Não foi possível obter a localização. Ative o GPS e permita o acesso.");
-        }
-      },
-      {
-        enableHighAccuracy:true,
-        maximumAge:0,
-        timeout:TEMPO_MAXIMO_GPS
+    function desenhar(e) {
+      if (!desenhando) return;
+      e.preventDefault();
+      const p = posicao(e);
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#000";
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    }
+
+    canvas.addEventListener("mousedown", iniciar);
+    canvas.addEventListener("mouseup", parar);
+    canvas.addEventListener("mousemove", desenhar);
+    canvas.addEventListener("mouseleave", parar);
+
+    canvas.addEventListener("touchstart", iniciar, { passive: false });
+    canvas.addEventListener("touchend", parar, { passive: false });
+    canvas.addEventListener("touchmove", desenhar, { passive: false });
+
+    function limparAssinatura() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function lerFoto() {
+      return new Promise(resolve => {
+        const file = document.getElementById("foto").files[0];
+        if (!file) return resolve("");
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function enviar() {
+      const status = document.getElementById("status");
+
+      const nome = document.getElementById("nome").value.trim();
+      const cpf = document.getElementById("cpf").value.trim();
+      const telefone = document.getElementById("telefone").value.trim();
+
+      if (!nome || !cpf || !telefone) {
+        status.innerText = "Preencha nome, CPF e telefone.";
+        return;
       }
-    );
 
-    setTimeout(()=>{
-      if(finalizado) return;
+      status.innerText = "Solicitando localização...";
 
-      finalizado = true;
-      navigator.geolocation.clearWatch(watchId);
+      navigator.geolocation.getCurrentPosition(async function(pos) {
+        const fotoBase64 = await lerFoto();
+        const assinaturaBase64 = canvas.toDataURL("image/png");
 
-      if(melhorPosicao && melhorPosicao.coords.accuracy <= PRECISAO_ACEITAVEL){
-        resolve(melhorPosicao);
-      }else{
-        reject("GPS impreciso. Vá para uma área aberta, ative o GPS e tente novamente.");
-      }
-    }, TEMPO_MAXIMO_GPS);
-  });
-}
+        const dados = {
+          nome: nome,
+          cpf: cpf,
+          telefone: telefone,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          precisao: pos.coords.accuracy,
+          foto: fotoBase64,
+          assinatura: assinaturaBase64
+        };
 
-async function obterEndereco(lat, lon){
-  try{
-    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1`;
-    const r = await fetch(url);
-    const j = await r.json();
-    const a = j.address || {};
+        status.innerText = "Enviando dados...";
 
-    return {
-      bairro: a.suburb || a.neighbourhood || a.city_district || a.quarter || "",
-      rua: a.road || a.pedestrian || a.residential || a.street || "",
-      numero: a.house_number || "",
-      cidadeEstado: `${a.city || a.town || a.village || a.municipality || ""} - ${a.state || ""}`
-    };
+        google.script.run
+          .withSuccessHandler(function() {
+  document.body.innerHTML = `
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0b0b0b;color:white;text-align:center;font-family:Arial;padding:20px;">
+    <div style="background:#111;border:1px solid #d4af37;border-radius:20px;padding:30px;max-width:500px;box-shadow:0 0 25px rgba(212,175,55,.3);">
+      <h1 style="color:#d4af37;">✓ Confirmação recebida</h1>
 
-  }catch(e){
-    return {
-      bairro:"",
-      rua:"",
-      numero:"",
-      cidadeEstado:""
-    };
-  }
-}
+      <p style="font-size:18px;line-height:1.6;">
+        Rogerio Cavalcanti agradece pela sua colaboração.
+      </p>
 
-function arquivoBase64(file){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+      <p style="color:#ccc;font-size:16px;line-height:1.6;">
+        Seus dados foram recebidos com sucesso e estão em processo de confirmação.
+      </p>
 
-document.getElementById("formulario").addEventListener("submit", async function(e){
-  e.preventDefault();
+      <p style="color:#999;font-size:14px;">
+        Você já pode fechar esta página.
+      </p>
+    </div>
+  </div>
+`;
+})
+          .withFailureHandler(function(erro) {
+            status.innerText = "Erro: " + erro.message;
+          })
+          .salvarDados(dados);
 
-  const btn = document.getElementById("btnEnviar");
-  const status = document.getElementById("status");
-
-  if(bloqueado()){
-    status.innerHTML = "Aguarde 5 minutos para enviar novamente.";
-    return;
-  }
-
-  btn.disabled = true;
-
-  try{
-    const nome = document.getElementById("nome").value.trim();
-    const pontos = document.getElementById("pontos").value.trim();
-    const fotoFile = document.getElementById("foto").files[0];
-
-    if(!nome) throw new Error("Informe o nome.");
-    if(pontos.length !== 11) throw new Error("O campo PONTOS precisa ter exatamente 11 dígitos.");
-    if(!fotoFile) throw new Error("A foto é obrigatória.");
-
-    status.innerHTML = "Obtendo localização precisa...<br>Aguarde até 30 segundos.";
-
-    const pos = await obterGPS();
-
-    const latitude = pos.coords.latitude;
-    const longitude = pos.coords.longitude;
-    const precisao = Math.round(pos.coords.accuracy) + "m";
-
-    const endereco = await obterEndereco(latitude, longitude);
-
-    status.innerHTML = "Enviando registro...";
-
-    const foto = await arquivoBase64(fotoFile);
-
-    const dados = {
-      nome,
-      pontos,
-      latitude,
-      longitude,
-      precisao,
-      bairro: endereco.bairro,
-      rua: endereco.rua,
-      numero: endereco.numero,
-      cidadeEstado: endereco.cidadeEstado,
-      foto
-    };
-
-    await fetch(SCRIPT_URL, {
-      method:"POST",
-      headers:{
-        "Content-Type":"text/plain;charset=utf-8"
-      },
-      body:JSON.stringify(dados)
-    });
-
-    localStorage.setItem("ultimoEnvioRC", Date.now().toString());
-
-    document.getElementById("formCard").style.display = "none";
-    document.getElementById("sucesso").style.display = "block";
-
-    setTimeout(()=>{
-      window.open("", "_self");
-      window.close();
-    },2000);
-
-  }catch(err){
-    status.innerHTML = "Erro: " + err.message;
-    btn.disabled = false;
-  }
-});
-</script>
-
+      }, function() {
+        status.innerText = "Localização não autorizada.";
+      }, {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      });
+    }
+  </script>
 </body>
 </html>
